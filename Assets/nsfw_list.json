@@ -1,0 +1,51 @@
+{
+  "type": "Video Game",
+  "description": "A Taro Yoko Project NieR:Automata is an action role-playing video game",
+  "url": "https://nierautomata.wiki.fextralife.com/Nier+Automata+Wiki",
+  "img": "https://i.imgur.com/jzZx30j.png",
+  "characters": [
+    {
+      "name": "2B",
+      "img": [
+	    "https://i.imgur.com/QmkEmIt.png",
+		"https://i.imgur.com/clQSJjk.png"
+      ]
+    },
+    {
+      "name": "A2",
+      "img": [
+		"https://i.imgur.com/sAgDxO2.png"
+      ]
+    },
+    {
+      "name": "Commander",
+      "img": [
+		"https://i.imgur.com/7fqwq6W.jpg"
+      ]
+    },
+    {
+      "name": "Operator 21O/6O",
+      "img": [
+		"https://i.imgur.com/Whw5chZ.png"
+      ]
+    },
+    {
+      "name": "YoRHa Defense Unit 16D",
+      "img": [
+		"https://i.imgur.com/oohowE5.png"
+      ]
+    },
+    {
+      "name": "Devola and Popola",
+      "img": [
+		"https://i.imgur.com/GhhSSM9.png"
+      ]
+    },
+    {
+      "name": "Anemone",
+      "img": [
+		"https://i.imgur.com/2pvnTnB.png"
+      ]
+    }
+  ]
+}

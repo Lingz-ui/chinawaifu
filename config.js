@@ -1,0 +1,3 @@
+{
+	botToken = "NTYyMTAyODE2NDQ2MDg3MTc5.XcH6Fg.MOk0RSI8LhBeeFwT4KMNtiQGxxo"
+}
