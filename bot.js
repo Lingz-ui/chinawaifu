@@ -9,7 +9,7 @@ module.exports = bot;
 require('./events/onMessage');
 require('./events/onError');
 require('./helpers/loadcommands').load();
-bot.login("");
+bot.login(botToken);
 
 bot.conf = {
 	prefix: '^',

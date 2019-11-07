@@ -1,3 +1,3 @@
-{
-	botToken = "NTYyMTAyODE2NDQ2MDg3MTc5.XcH6Fg.MOk0RSI8LhBeeFwT4KMNtiQGxxo"
+module.exports = {
+	botToken: "NjQxNzgwOTIyNDQ1ODU2NzY4.XcP1mw.I1YPfm_hu_ZBpKl8FbIoWKInpW4"
 }
