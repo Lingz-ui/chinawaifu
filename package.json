@@ -1,0 +1,27 @@
+{
+  "name": "runner",
+  "version": "1.0.0",
+  "description": "Welp, ggwp",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hestia2412/cnmde.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hestia2412/cnmde/issues"
+  },
+  "homepage": "https://github.com/hestia2412/cnmde#readme",
+  "dependencies": {
+    "booru": "^2.0.3",
+    "discord.js": "^11.5.1",
+    "es6-promise": "^4.2.8",
+    "isomorphic-fetch": "^2.2.1",
+    "sqlite3": "^4.1.0"
+  }
+}
