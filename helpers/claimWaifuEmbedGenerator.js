@@ -1,5 +1,7 @@
 let Discord = require('discord.js');
 let dbHelper = require('../helpers/dbhelper');
+let maxClaim = 10;
+let maxTime = 30*1000;
 
 exports.createAndSendClaimEmbed = (rollList, message, bot) => {
     let rand = Math.floor(Math.random() * 100);
@@ -45,17 +47,22 @@ let createSFWClaimEmbed = (rollList, message, bot) => {
                 if (collected.get('💖')) {
                     let userID = collected.get('💖').users.lastKey();
                     let claimingUser = collected.get('💖').users.get(userID);
-                    msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
-                    let claimedEmbed = new Discord.RichEmbed()
-                        .setTitle(`${waifu.name}`)
-                        .setColor(0xE06666)
-                        .setDescription(`${waifu.series}\n\nRolled by: ${claimingUser.username}`)
-                        .setImage(`${waifu.img[0]}`)
-                        .setFooter(`Claimed by ${claimingUser.username}`,
-                            claimingUser.avatarURL);
-
-                    claimingUser.serverid = message.guild.id;
-                    dbHelper.claimWaifu(claimingUser, waifu).then(e => msg.edit(claimedEmbed));
+                    
+                    checkClaimRestrict(bot).then(res=>{
+                        msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
+                        let claimedEmbed = new Discord.RichEmbed()
+                            .setTitle(`${waifu.name}`)
+                            .setColor(0xE06666)
+                            .setDescription(`${waifu.series}\n\nRolled by: ${claimingUser.username}`)
+                            .setImage(`${waifu.img[0]}`)
+                            .setFooter(`Claimed by ${claimingUser.username}`,
+                                claimingUser.avatarURL);
+    
+                        claimingUser.serverid = message.guild.id;
+                        dbHelper.claimWaifu(claimingUser, waifu).then(e => msg.edit(claimedEmbed));
+                    }).catch(rej=>{
+                        msg.channel.send(rej);
+                    })
                 }
                 msg.clearReactions().then();
             });
@@ -114,18 +121,22 @@ let createNSFWClaimEmbed = (rollList, message, bot) => {
                 collector.on('end', collected => {
                     if (collected.get('💖')) {
                         let userID = collected.get('💖').users.lastKey();
-                        msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
-                        let claimingUser = collected.get('💖').users.get(userID);
-                        let claimedEmbed = new Discord.RichEmbed()
-                            .setTitle(`${waifu.name}`)
-                            .setColor(0xE06666)
-                            .setDescription(`${waifu.series}\n\nRolled by: ${claimingUser.username}`)
-                            .setImage(`${waifu.img[0]}`)
-                            .setFooter(`Claimed by ${claimingUser.username}`,
-                                claimingUser.avatarURL);
+                        checkClaimRestrict(bot).then(res=>{
+                            msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
+                            let claimingUser = collected.get('💖').users.get(userID);
+                            let claimedEmbed = new Discord.RichEmbed()
+                                .setTitle(`${waifu.name}`)
+                                .setColor(0xE06666)
+                                .setDescription(`${waifu.series}\n\nRolled by: ${claimingUser.username}`)
+                                .setImage(`${waifu.img[0]}`)
+                                .setFooter(`Claimed by ${claimingUser.username}`,
+                                    claimingUser.avatarURL);
 
-                        claimingUser.serverid = message.guild.id;
-                        dbHelper.claimWaifu(claimingUser, waifu).then(e => msg.edit(claimedEmbed));
+                            claimingUser.serverid = message.guild.id;
+                            dbHelper.claimWaifu(claimingUser, waifu).then(e => msg.edit(claimedEmbed));
+                        }).catch(rej=>{
+                            msg.channel.send(rej);
+                        })
                     }
                     msg.clearReactions().then();
                 });
@@ -170,4 +181,46 @@ async function fetchNSFWImage(tag) {
         src: 'Danbooru',
         img: res[Math.floor(Math.random() * res.length)]._data.file_url
     };
+}
+
+function checkClaimRestrict(bot){
+    return new Promise((resolve,reject)=>{
+        //--------------Start claimRestrict---------------//
+        let now = Date.now();
+        let uid = message.author.id;
+        if(bot.claimRestrict.has(uid)){
+            // Registed in collection
+            let restrictor = bot.claimRestrict.get(uid);
+            if(restrictor.exp_time < now){
+                // Expired
+                restrictor.counter = 1;
+                restrictor.exp_time = now + maxTime;
+                bot.claimRestrict.set(uid,restrictor);
+            }else{
+                if(restrictor.counter == maxClaim){
+                    let delta = restrictor.exp_time - Date.now();
+                    let sec = (delta/1000).toFixed(0);
+                    let min = (delta/60000).toFixed(0);
+                    let waitTime = "";
+                    if(sec < 60){
+                        waitTime = sec+"s"
+                    }else{
+                        waitTime = min+"m"
+                    }
+                    reject(`>>> Max claim. Next claim reset in about ${waitTime}`);
+                }else{
+                    restrictor.counter++;
+                    bot.claimRestrict.set(uid,restrictor);
+                }
+            }
+        }else{
+            // Not registed in collection
+            bot.claimRestrict.set(uid,{
+                counter: 1, // Init counter = 1
+                exp_time: Date.now() + maxTime  // expire after one hour
+            })
+        }
+        resolve(1);
+        //-----------End claimRestrict------------//
+    })
 }

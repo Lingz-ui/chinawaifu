@@ -15,3 +15,5 @@ bot.conf = {
 	prefix: '^',
 	claimTimeout: '15'
 };
+
+bot.claimRestrict = new Discord.Collection;
