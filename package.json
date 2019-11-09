@@ -1,5 +1,5 @@
 {
-  "name": "runner",
+  "name": "wfb",
   "version": "1.0.0",
   "description": "Welp, ggwp",
   "main": "bot.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hestia2412/cnmde.git"
+    "url": "git+https://github.com/hestia2412/china.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hestia2412/cnmde/issues"
+    "url": "https://github.com/hestia2412/chinawaifu/issues"
   },
-  "homepage": "https://github.com/hestia2412/cnmde#readme",
+  "homepage": "https://github.com/hestia2412/chinawaifu#readme",
   "dependencies": {
     "booru": "^2.0.3",
     "discord.js": "^11.5.1",
