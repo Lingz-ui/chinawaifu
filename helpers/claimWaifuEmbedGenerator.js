@@ -1,7 +1,7 @@
 let Discord = require('discord.js');
 let dbHelper = require('../helpers/dbhelper');
-let maxClaim = 10;
-let maxTime = 30*1000;
+let maxClaim = 5;
+let maxTime = 30*30*1000;
 
 exports.createAndSendClaimEmbed = (rollList, message, bot) => {
     let rand = Math.floor(Math.random() * 100);
@@ -48,7 +48,7 @@ let createSFWClaimEmbed = (rollList, message, bot) => {
                     let userID = collected.get('💖').users.lastKey();
                     let claimingUser = collected.get('💖').users.get(userID);
                     
-                    checkClaimRestrict(bot).then(res=>{
+                    checkClaimRestrict(bot,message).then(res=>{
                         msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
                         let claimedEmbed = new Discord.RichEmbed()
                             .setTitle(`${waifu.name}`)
@@ -121,7 +121,7 @@ let createNSFWClaimEmbed = (rollList, message, bot) => {
                 collector.on('end', collected => {
                     if (collected.get('💖')) {
                         let userID = collected.get('💖').users.lastKey();
-                        checkClaimRestrict(bot).then(res=>{
+                        checkClaimRestrict(bot,message).then(res=>{
                             msg.channel.send('<@' + userID + '>' + ' has claimed ' + waifu.name + '!');
                             let claimingUser = collected.get('💖').users.get(userID);
                             let claimedEmbed = new Discord.RichEmbed()
@@ -183,7 +183,7 @@ async function fetchNSFWImage(tag) {
     };
 }
 
-function checkClaimRestrict(bot){
+function checkClaimRestrict(bot,message){
     return new Promise((resolve,reject)=>{
         //--------------Start claimRestrict---------------//
         let now = Date.now();
